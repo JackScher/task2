@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from task2.core.models import UserProfile, Rate, Question, Answer, Comment, Tag
+from task2.chatting.models import Rate, Answer, Comment, Question
+from task2.core.models import UserProfile, Tag
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -17,24 +18,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         for obj in arr:
             res += obj['count']
         return res
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id']
-
-
-class AnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answer
-        fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_id']
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ['id', 'date', 'user_id', 'content_object']
 
 
 class TagSerializer(serializers.ModelSerializer):
