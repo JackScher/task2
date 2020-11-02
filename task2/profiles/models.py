@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
-from task2.chatting.models import DateParent, Question
+from django.contrib.auth.models import User, AbstractUser
+from question.models import DateParent, Question
 
 
-class UserProfile(User):
+class UserProfile(AbstractUser):
     avatar = models.ImageField(null=True)
     place_of_employment = models.CharField(max_length=255)
     about_yourself = models.TextField()

@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 
-from task2.core.models import UserProfile
+from profiles.models import UserProfile
 
 
 class DateParent:

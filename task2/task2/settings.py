@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'mptt',
     'rest_framework',
 
-    'core',
-    'chatting'
+    'profiles',
+    'question'
 ]
 
 MIDDLEWARE = [
