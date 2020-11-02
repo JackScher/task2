@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
-from question.models import DateParent, Question
+# from question.models import Question, Tag
 
 
-class UserProfile(AbstractUser):
+class UserProfile(User):
     avatar = models.ImageField(null=True)
     place_of_employment = models.CharField(max_length=255)
     about_yourself = models.TextField()
@@ -23,12 +23,14 @@ class UserProfile(AbstractUser):
         (status2, 'working')
     )
 
-
-class Tag(models.Model, DateParent):
-    name = models.CharField(max_length=255)
-    question_id = models.ManyToManyField(to=Question)
-
-
-class Skill(models.Model):
-    user_id = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE)
-    tag_id = models.ManyToManyField(to=Tag)
+#
+# class Tag(models.Model):
+#     name = models.CharField(max_length=255)
+#     date_create = models.DateTimeField(auto_now_add=True)
+#     date_update = models.DateTimeField()
+#     question_id = models.ManyToManyField(to=Question)
+#
+#
+# class Skill(models.Model):
+#     user_id = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE)
+#     tag_id = models.ManyToManyField(to=Tag)
