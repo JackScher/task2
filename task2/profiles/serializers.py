@@ -1,6 +1,8 @@
 from rest_framework import serializers
 #
 # from question.models import Rate
+from rest_framework.authtoken.models import Token
+
 from profiles.models import UserProfile
 
 
@@ -11,6 +13,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['id', 'username', 'password', 'avatar', 'place_of_employment', 'about_yourself', 'location', 'RANK_CHOICES',
                   'STATUS_CHOICES']
+        extra_kwargs = {'password': {'required': True, 'write_only': True}}
+
+    def create(self, validated_data):
+        user = UserProfile.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
+        return user
 
 
 # class UserProfileSerializer(serializers.ModelSerializer):
