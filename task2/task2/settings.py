@@ -40,6 +40,9 @@ INSTALLED_APPS = [
 
     'mptt',
     'rest_framework',
+    'rest_framework.authtoken',
+
+    'rest_auth',
 
     'profiles',
     'question'

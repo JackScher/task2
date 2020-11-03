@@ -1,9 +1,18 @@
-# from rest_framework import serializers
+from rest_framework import serializers
 #
 # from question.models import Rate
-# from profiles.models import UserProfile, Tag
-#
-#
+from profiles.models import UserProfile
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    # user_rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'username', 'password', 'avatar', 'place_of_employment', 'about_yourself', 'location', 'RANK_CHOICES',
+                  'STATUS_CHOICES']
+
+
 # class UserProfileSerializer(serializers.ModelSerializer):
 #     user_rating = serializers.SerializerMethodField()
 #

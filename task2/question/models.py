@@ -18,7 +18,7 @@ class Question(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
     date_create = models.DateTimeField(auto_now_add=True)
-    date_update = models.DateTimeField()
+    date_update = models.DateTimeField(null=True)
     user_id = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE)
 
 
@@ -26,7 +26,7 @@ class Answer(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
     date_create = models.DateTimeField(auto_now_add=True)
-    date_update = models.DateTimeField()
+    date_update = models.DateTimeField(null=True)
     user_id = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE)
     question_id = models.ForeignKey(to=Question, on_delete=models.CASCADE)
 
@@ -34,7 +34,7 @@ class Answer(models.Model):
 class Comment(models.Model):
     text = models.TextField()
     date_create = models.DateTimeField(auto_now_add=True)
-    date_update = models.DateTimeField()
+    date_update = models.DateTimeField(null=True)
     user_id = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -53,11 +53,10 @@ class Rate(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=255)
     date_create = models.DateTimeField(auto_now_add=True)
-    date_update = models.DateTimeField()
+    date_update = models.DateTimeField(null=True)
     question_id = models.ManyToManyField(to=Question)
 
 
 class Skill(models.Model):
     user_id = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE)
     tag_id = models.ManyToManyField(to=Tag)
-

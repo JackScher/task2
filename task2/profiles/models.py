@@ -5,9 +5,9 @@ from django.contrib.auth.models import User, AbstractUser
 
 class UserProfile(User):
     avatar = models.ImageField(null=True)
-    place_of_employment = models.CharField(max_length=255)
-    about_yourself = models.TextField()
-    location = models.CharField(max_length=255)
+    place_of_employment = models.CharField(max_length=255, null=True)
+    about_yourself = models.TextField(null=True)
+    location = models.CharField(max_length=255, null=True)
     rank1 = 'r1'
     rank2 = 'r2'
     rank3 = 'r3'
