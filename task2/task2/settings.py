@@ -135,11 +135,14 @@ AUTH_PASSWORD_VALIDATORS = [
 #     'JWT_ALLOW_REFRESH': True,
 # }
 #
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-#     ),
-# }
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    # ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 #
 # REST_USE_JWT = True
 
@@ -180,20 +183,18 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-# ALLAUTH = {
-#     'ACCOUNT_EMAIL_VERIFICATION': 'mandatory',
-#     'ACCOUNT_AUTHENTICATION_METHOD': 'email',
-#     'ACCOUNT_UNIQUE_EMAIL': True,
-#     'ACCOUNT_EMAIL_REQUIRED': True,
-#     'ACCOUNT_USERNAME_REQUIRED': False
-# }
+REST_AUTH_REGISTER_SERIALIZER = {
+    'REGISTER_SERIALIZER': 'profiles.serializers.CustomRegistrationSerializer'
+}
 
 # ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = True
+
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_USERNAME_REQUIRED = True
 
 
 AUTH_USER_MODEL = 'profiles.UserProfile'

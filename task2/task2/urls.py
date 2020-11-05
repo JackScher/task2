@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from rest_auth.registration.views import RegisterView, VerifyEmailView
+from rest_auth.views import LoginView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -30,7 +32,14 @@ urlpatterns = [
     # path('auth/', obtain_auth_token),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    # path('registration/', RegisterView.as_view(), name='account_signup'),
     # path('refresh-token/', refresh_jwt_token),
+
+    path('login/', LoginView.as_view(), name='account_login'),
+    path('registration/', include('rest_auth.registration.urls')),
+    path('registration/', RegisterView.as_view(), name='account_signup'),
+    re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
+    re_path(r'^account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
 ]
 
 # urlpatterns += router.urls

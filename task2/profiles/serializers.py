@@ -1,3 +1,4 @@
+from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 #
 # from question.models import Rate
@@ -19,6 +20,13 @@ from rest_framework.authtoken.models import Token
     #     user = UserProfile.objects.create_user(**validated_data)
     #     Token.objects.create(user=user)
     #     return user
+
+
+# class CustomRegistrationSerializer(RegisterSerializer):
+#     def save(self, request):
+#         user = super(CustomRegistrationSerializer, self).save(request)
+#         user.is_active = False
+#         return user
 
 
 # class UserProfileSerializer(serializers.ModelSerializer):
