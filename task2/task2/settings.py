@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+# import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,11 +40,16 @@ INSTALLED_APPS = [
 
     'corsheaders',
 
-    'mptt',
     'rest_framework',
     'rest_framework.authtoken',
 
     'rest_auth',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth.registration',
 
     'profiles',
     'question'
@@ -64,7 +69,6 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    # "http://127.0.0.1:9000"
 ]
 
 
@@ -86,18 +90,25 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'task2.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'task2_db',
+        'USER': 'admin',
+        'PASSWORD': '1111',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -119,6 +130,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# JWT_AUTH = {
+#     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+#     'JWT_ALLOW_REFRESH': True,
+# }
+#
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+#     ),
+# }
+#
+# REST_USE_JWT = True
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -137,3 +162,40 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'userfortask2@gmail.com'
+EMAIL_HOST_PASSWORD = 'hbugydjbgbbcwxbr'
+EMAIL_USE_TLS = True
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+# ALLAUTH = {
+#     'ACCOUNT_EMAIL_VERIFICATION': 'mandatory',
+#     'ACCOUNT_AUTHENTICATION_METHOD': 'email',
+#     'ACCOUNT_UNIQUE_EMAIL': True,
+#     'ACCOUNT_EMAIL_REQUIRED': True,
+#     'ACCOUNT_USERNAME_REQUIRED': False
+# }
+
+# ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = True
+
+
+AUTH_USER_MODEL = 'profiles.UserProfile'
+
+SITE_ID = 1

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, AbstractUser
 # from question.models import Question, Tag
 
 
-class UserProfile(User):
+class UserProfile(AbstractUser):
     avatar = models.ImageField(null=True)
     place_of_employment = models.CharField(max_length=255, null=True)
     about_yourself = models.TextField(null=True)
