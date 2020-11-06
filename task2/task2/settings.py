@@ -71,6 +71,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
 ]
 
+# CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'task2.urls'
 
@@ -130,15 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# JWT_AUTH = {
-#     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-#     'JWT_ALLOW_REFRESH': True,
-# }
-#
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    # ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
@@ -198,5 +192,7 @@ ACCOUNT_USERNAME_REQUIRED = True
 
 
 AUTH_USER_MODEL = 'profiles.UserProfile'
+ACCOUNT_ADAPTER = 'profiles.adapters.CustomAdapter'
+FRONTEND_HOST = 'http://127.0.0.1:8080/#'
 
 SITE_ID = 1
