@@ -27,10 +27,11 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('rest-auth/confirmation/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
+    # path('rest-auth/', include('rest_auth.urls')),
+    # path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    # path('rest-auth/confirmation/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
     # path('rest-auth/account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(), name='account_confirm_email'),
+    path('rest-auth/', include('profiles.urls'))
 ]
 
 # urlpatterns += router.urls
