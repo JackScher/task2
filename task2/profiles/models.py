@@ -22,6 +22,7 @@ class UserProfile(AbstractUser):
         (status1, 'educating'),
         (status2, 'working')
     )
+    # access_token = models.TextField(null=True, blank=True)
 
 #
 # class Tag(models.Model):

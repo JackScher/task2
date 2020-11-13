@@ -16,10 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_auth.registration.views import VerifyEmailView
-from  rest_auth.registration.urls import TemplateView
+from rest_auth.registration.urls import TemplateView
 from rest_framework.routers import DefaultRouter
 
-# from profiles.views import UserProfileViewSet
 
 # router = DefaultRouter()
 # router.register('api/users', UserProfileViewSet)
@@ -27,11 +26,9 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('rest-auth/', include('rest_auth.urls')),
-    # path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    # path('rest-auth/confirmation/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    # path('rest-auth/account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(), name='account_confirm_email'),
-    path('rest-auth/', include('profiles.urls'))
+    path('rest-auth/', include('profiles.urls')),
+    path('auth-services/', include('auth_services.urls')),
+    path('questions/', include('question.urls'))
 ]
 
 # urlpatterns += router.urls

@@ -51,6 +51,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_auth.registration',
 
+    # 'allauth.socialaccount.providers.linkedin',
+    # 'allauth.socialaccount.providers.linkedin_oauth2',
+
+    'allauth.socialaccount.providers.google',
+
     'profiles',
     'question'
 ]
@@ -73,10 +78,52 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-# CORS_ORIGIN_ALLOW_ALL = True
-
 
 ROOT_URLCONF = 'task2.urls'
+
+
+#####################################===Linkedin===#####################################
+
+# LOGIN_URL = 'login'
+# LOGIN_REDIRECT_URL = 'home'
+# LOGOUT_URL = 'logout'
+# LOGOUT_REDIRECT_URL = 'login'
+#
+#
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = 'secret'         #Client ID
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'secret'  #Client Secret
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress']
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address', 'formatted-name', 'public-profile-url', 'picture-url']
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
+#     ('id', 'id'),
+#     ('formattedName', 'name'),
+#     ('emailAddress', 'email_address'),
+#     ('pictureUrl', 'picture_url'),
+#     ('publicProfileUrl', 'profile_url'),
+# ]
+
+#####################################===Linkedin===#####################################
+
+#####################################===Google===#####################################
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    }
+}
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '730249173496-cs79cmelhvjcgfqogrl7502au66finrs.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '4G2H5jm80pgXjzoeWWgftf1v'
+APPEND_SLASH = False
+
+#####################################===Google===#####################################
+
 
 TEMPLATES = [
     {
@@ -177,6 +224,8 @@ AUTHENTICATION_BACKENDS = (
 
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
+    # 'social_core.backends.linkedin.LinkedinOAuth2'
+    'social.backends.google.GoogleOAuth2'
 )
 
 REST_AUTH_REGISTER_SERIALIZER = {

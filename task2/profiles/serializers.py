@@ -2,7 +2,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 #
 # from question.models import Rate
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
 
 # from profiles.models import UserProfile
 #

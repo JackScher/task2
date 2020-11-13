@@ -45,10 +45,10 @@ class Comment(models.Model):
 
 class Rate(models.Model):
     count = models.IntegerField(default=1)
-    user_id = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    question_id = models.OneToOneField(to=Question, on_delete=models.CASCADE, null=True)
-    answer_id = models.OneToOneField(to=Answer, on_delete=models.CASCADE, null=True)
-    comment_id = models.OneToOneField(to=Comment, on_delete=models.CASCADE, null=True)
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    question_id = models.ForeignKey(to=Question, on_delete=models.CASCADE, blank=True)
+    answer_id = models.ForeignKey(to=Answer, on_delete=models.CASCADE, blank=True)
+    comment_id = models.ForeignKey(to=Comment, on_delete=models.CASCADE, blank=True)
 
 
 class Tag(models.Model):
@@ -59,5 +59,5 @@ class Tag(models.Model):
 
 
 class Skill(models.Model):
-    user_id = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tag_id = models.ManyToManyField(to=Tag)
