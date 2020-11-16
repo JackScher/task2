@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
 
     'corsheaders',
 
@@ -225,7 +226,7 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
     # 'social_core.backends.linkedin.LinkedinOAuth2'
-    'social.backends.google.GoogleOAuth2'
+    # 'social.backends.google.GoogleOAuth2'
 )
 
 REST_AUTH_REGISTER_SERIALIZER = {

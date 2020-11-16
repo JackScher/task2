@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
@@ -9,7 +10,9 @@ from question.serializers import QuestionSerializer, AnswerSerializer, CommentSe
 
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
-    permission_classes = (AllowAny, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['user_id', 'id']
     serializer_class = QuestionSerializer
 
 

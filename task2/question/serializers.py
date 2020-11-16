@@ -8,8 +8,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        # fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_rating']
-        fields = '__all__'
+        fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id']
+        # fields = '__all__'
 
     # def get_question_rating(self, instance):
     #     arr = Rate.objects.filter(id=instance)
