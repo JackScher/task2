@@ -25,7 +25,7 @@ class CustomView(APIView, ConfirmEmailView):
 
 class ProfileView(ModelViewSet):
     queryset = UserProfile.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = [DjangoFilterBackend]
     filter_fields = ['id']
     serializer_class = UserProfileSerializer
