@@ -25,9 +25,8 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = '__all__'
-#         fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_id', 'answer_rating']
-#
+        fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_id']
+
 #     def get_answer_rating(self, instance):
 #         arr = Rate.objects.filter(id=instance)
 #         res = 0

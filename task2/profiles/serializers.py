@@ -1,8 +1,6 @@
-from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
-#
-# from question.models import Rate
-# from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import Token
+
 
 from profiles.models import UserProfile
 
@@ -22,7 +20,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
     #     return user
 
 
-#
+class UserIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id']
+        # fields = '__all__'
+
+
+class MyCustomTokenSerializer(serializers.ModelSerializer):
+    user = UserIdSerializer(read_only=True)
+
+    class Meta:
+        model = Token
+        fields = ('key', 'user')
+
 #     def user_rating(self, instance):
 #         arr = Rate.objects.filter(id=instance)
 #         res = 0

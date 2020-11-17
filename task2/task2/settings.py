@@ -230,8 +230,14 @@ AUTHENTICATION_BACKENDS = (
 )
 
 REST_AUTH_REGISTER_SERIALIZER = {
-    'REGISTER_SERIALIZER': 'profiles.serializers.CustomRegistrationSerializer'
+    'REGISTER_SERIALIZER': 'profiles.serializers.CustomRegistrationSerializer',
+
 }
+
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'profiles.serializers.MyCustomTokenSerializer',
+}
+
 
 # ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
