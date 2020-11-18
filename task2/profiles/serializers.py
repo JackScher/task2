@@ -28,7 +28,7 @@ class UserIdSerializer(serializers.ModelSerializer):
 
 
 class MyCustomTokenSerializer(serializers.ModelSerializer):
-    user = UserIdSerializer(read_only=True)
+    user = UserIdSerializer()
 
     class Meta:
         model = Token

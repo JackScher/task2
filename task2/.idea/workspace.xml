@@ -32,6 +32,8 @@
       <change beforePath="$PROJECT_DIR$/../front/task2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/profiles/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/question/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/question/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/question/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/question/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/question/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/views.py" afterDir="false" />
@@ -119,7 +121,8 @@
       <workItem from="1605171035735" duration="9418000" />
       <workItem from="1605266474533" duration="11543000" />
       <workItem from="1605514240326" duration="14296000" />
-      <workItem from="1605600388524" duration="15671000" />
+      <workItem from="1605600388524" duration="15958000" />
+      <workItem from="1605687240647" duration="18666000" />
     </task>
     <servers />
   </component>
@@ -199,10 +202,14 @@
       <screen x="67" y="27" width="1853" height="1173" />
     </state>
     <state x="245" y="179" key="SettingsEditor/67.27.1853.1173@67.27.1853.1173" timestamp="1605527909891" />
-    <state x="756" y="314" width="672" height="678" key="search.everywhere.popup" timestamp="1605108051561">
+    <state width="600" height="428" key="javadoc.popup" timestamp="1605715055947">
       <screen x="67" y="27" width="1853" height="1173" />
     </state>
-    <state x="756" y="314" width="672" height="678" key="search.everywhere.popup/67.27.1853.1173@67.27.1853.1173" timestamp="1605108051561" />
+    <state width="600" height="428" key="javadoc.popup/67.27.1853.1173@67.27.1853.1173" timestamp="1605715055947" />
+    <state x="756" y="314" width="672" height="678" key="search.everywhere.popup" timestamp="1605687566192">
+      <screen x="67" y="27" width="1853" height="1173" />
+    </state>
+    <state x="756" y="314" width="672" height="678" key="search.everywhere.popup/67.27.1853.1173@67.27.1853.1173" timestamp="1605687566192" />
     <state x="481" y="436" width="540" height="216" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1604486902939">
       <screen x="67" y="27" width="1853" height="1173" />
     </state>
