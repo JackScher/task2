@@ -3,15 +3,30 @@ from rest_framework.authtoken.models import Token
 
 
 from profiles.models import UserProfile
+from question.models import Answer, Question
+
+
+class AnswerModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['id', 'title', 'body']
+
+
+class QuestionsModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['id', 'title', 'body']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     # user_rating = serializers.SerializerMethodField()
+    answers = AnswerModuleSerializer(many=True)
+    questions = QuestionsModuleSerializer(many=True)
 
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
-                  'RANK_CHOICES', 'STATUS_CHOICES']
+                  'RANK_CHOICES', 'STATUS_CHOICES', 'answers', 'questions']
         # extra_kwargs = {'password': {'required': True, 'write_only': True}}
 
     # def create(self, validated_data):
@@ -40,3 +55,10 @@ class MyCustomTokenSerializer(serializers.ModelSerializer):
 #         for obj in arr:
 #             res += obj['count']
 #         return res
+
+
+class CreateUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
+                  'STATUS_CHOICES']

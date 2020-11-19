@@ -2,10 +2,11 @@ from django.urls import path, include
 from rest_auth.registration.views import VerifyEmailView
 from rest_framework.routers import DefaultRouter
 
-from profiles.views import CustomView, ProfileView
+from profiles.views import CustomView, ProfileView, UpdateUserProfileView
 
 router = DefaultRouter()
 router.register('api/users', ProfileView)
+router.register('api/user/create', UpdateUserProfileView)
 
 
 urlpatterns = [

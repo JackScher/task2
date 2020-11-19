@@ -24,14 +24,14 @@ class Comment(DateParent):
 class Question(DateParent):
     title = models.CharField(max_length=255)
     body = models.TextField()
-    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='questions')
     comments = GenericRelation(Comment)
 
 
 class Answer(DateParent):
     title = models.CharField(max_length=255)
     body = models.TextField()
-    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='answers')
     question_id = models.ForeignKey(to=Question, on_delete=models.CASCADE, related_name='answers')
     comments = GenericRelation(Comment)
 

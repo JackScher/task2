@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from profiles.models import UserProfile
-from profiles.serializers import UserProfileSerializer
+from profiles.serializers import UserProfileSerializer, CreateUserProfileSerializer
 
 
 class CustomView(APIView, ConfirmEmailView):
@@ -29,3 +29,10 @@ class ProfileView(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filter_fields = ['id']
     serializer_class = UserProfileSerializer
+
+
+class UpdateUserProfileView(ModelViewSet):
+    # allowed_methods = ('PUT', 'GET', 'POST', 'OPTIONS', 'HEAD')
+    queryset = UserProfile.objects.all()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    serializer_class = CreateUserProfileSerializer

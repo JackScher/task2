@@ -55,46 +55,33 @@ class QuestionItemSerializer(serializers.ModelSerializer):
     answers = AnswerModuleSerializer(many=True)
     tags = TagModuleSerializer(many=True)
     comments = CommentModuleSerializer(many=True)
+    user_id = UserProfileModuleSerializer()
 
     class Meta:
         model = Question
-        fields = ['id', 'title', 'body', 'answers', 'tags', 'comments']
+        fields = ['id', 'title', 'body', 'answers', 'tags', 'comments', 'user_id']
 
 
 #############################Question Item Serializser#############################
 
 
-class AnswerSerializer(serializers.ModelSerializer):
-    user_id = UserProfileModuleSerializer()
-    comments = CommentModuleSerializer(many=True)
-
+class AnswerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_id', 'comments']
+        fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_id']
 
 
 ###################################################################################
 
-#
-# class AnswerItemSerializer(serializers.ModelSerializer):
-#     user_id = UserProfileModuleSerializer()
-#     comments = CommentModuleSerializer(many=True)
-#
-#     class Meta:
-#         model = Answer
-#         fields = ['id', 'title', 'body', 'user_id', 'comments']
 
 
-##############################Answer Item Serializser##############################
-
-
-class CommentSerializer(serializers.ModelSerializer):
+class CommentCreateSerializer(serializers.ModelSerializer):
     # comment_rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        # fields = ['id', 'date', 'user_id', 'content_object', 'comment_rating']
-        fields = '__all__'
+        fields = ['id', 'text', 'content_type', 'object_id']
+        # fields = '__all__'
 
     # def get_comment_rating(self, instance):
     #     arr = Rate.objects.filter(id=instance)
