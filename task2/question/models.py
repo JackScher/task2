@@ -36,21 +36,13 @@ class Answer(DateParent):
     comments = GenericRelation(Comment)
 
 
-# class Comment(DateParent):
-#     text = models.TextField()
-#     user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#
-#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='comments')
-#     object_id = models.PositiveIntegerField()
-#     content_object = GenericForeignKey('content_type', 'object_id')
-
-
-class Rate(models.Model):
-    count = models.IntegerField(default=1)
-    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    question_id = models.ForeignKey(to=Question, on_delete=models.CASCADE, blank=True)
-    answer_id = models.ForeignKey(to=Answer, on_delete=models.CASCADE, blank=True)
-    comment_id = models.ForeignKey(to=Comment, on_delete=models.CASCADE, blank=True)
+# class Rating(models.Model):
+#     value = models.IntegerField(default=1)
+#     # value = models.CharField(max_length=255, default='like')
+#     user_id = models.ManyToManyField(to=settings.AUTH_USER_MODEL)
+#     question_id = models.ManyToManyField(to=Question, blank=True)
+#     answer_id = models.ManyToManyField(to=Answer, blank=True)
+#     comment_id = models.ManyToManyField(to=Comment, blank=True)
 
 
 class Tag(DateParent):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from profiles.models import UserProfile
-from question.models import Question, Answer, Comment, Rate, Tag, Skill
+from question.models import Question, Answer, Comment, Tag, Skill
 
 
 class TagModuleSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     tags = TagModuleSerializer(many=True)
     user_id = UserProfileModuleSerializer()
     comments = CommentModuleSerializer(many=True)
+
 
     class Meta:
         model = Question
@@ -70,6 +71,16 @@ class AnswerCreateSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ['id', 'title', 'body', 'date_create', 'date_update', 'user_id', 'question_id']
 
+    # def create(self, validated_data):
+    #     answer = Answer.objects.create(**validated_data)
+    #     user = UserProfile.objects.get(id=answer.user_id.id)
+    #     rating = Rating.objects.create()
+    #     rating.answer_id.add(answer.id)
+    #     rating.user_id.add(user.id)
+    #     print('ANSWER ID: ', rating.answer_id)
+    #     print('USER ID: ', rating.user_id)
+    #     return answer
+
 
 ###################################################################################
 
@@ -91,10 +102,10 @@ class CommentCreateSerializer(serializers.ModelSerializer):
     #     return res
 
 
-class RateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rate
-        fields = '__all__'
+# class RateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Rate
+#         fields = '__all__'
 
 
 class TagSerializer(serializers.ModelSerializer):

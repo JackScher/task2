@@ -7,11 +7,13 @@ from profiles.views import CustomView, ProfileView, UpdateUserProfileView
 router = DefaultRouter()
 router.register('api/users', ProfileView)
 router.register('api/user/create', UpdateUserProfileView)
+# router.register('registration/', RegisterUserProfileView)
 
 
 urlpatterns = [
     path('', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
+    # path('registration/', RegisterUserProfileView.as_view()),
     path('confirmation/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
     path('registration/account-confirm-email/<str:key>', CustomView.as_view(), name='account_confirm_email'),
 ]

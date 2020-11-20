@@ -21,7 +21,8 @@ class UserProfile(AbstractUser):
     STATUS_CHOICES = (
         (status1, 'educating'),
         (status2, 'working')
-    )
+    ),
+    rating = models.IntegerField(default=10)
     # access_token = models.TextField(null=True, blank=True)
 
 #

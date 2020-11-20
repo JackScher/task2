@@ -1,7 +1,6 @@
-# from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from question.views import QuestionViewSet, AnswerCreateView, CommentViewSet, RateViewSet, TagViewSet, SkillViewSet, \
+from question.views import QuestionViewSet, AnswerCreateView, CommentViewSet, TagViewSet, SkillViewSet, \
     QuestionItemViewSet, QuestionCreateView
 
 router = DefaultRouter()
@@ -15,7 +14,7 @@ router.register('api/question/create', QuestionCreateView)
 
 router.register('api/comment/create', CommentViewSet)
 
-router.register('api/rate', RateViewSet)
+# router.register('api/rate', RateViewSet)
 router.register('api/tag', TagViewSet)
 router.register('api/skills', SkillViewSet)
 

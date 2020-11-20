@@ -26,7 +26,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
-                  'RANK_CHOICES', 'STATUS_CHOICES', 'answers', 'questions']
+                  'RANK_CHOICES', 'STATUS_CHOICES', 'answers', 'questions', 'rating']
         # extra_kwargs = {'password': {'required': True, 'write_only': True}}
 
     # def create(self, validated_data):
