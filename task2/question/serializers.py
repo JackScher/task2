@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from profiles.models import UserProfile
-from question.models import Question, Answer, Comment, Tag, Skill
+from question.models import Question, Answer, Comment, Tag, Skill, Vote
 
 
 class TagModuleSerializer(serializers.ModelSerializer):
@@ -85,7 +85,6 @@ class AnswerCreateSerializer(serializers.ModelSerializer):
 ###################################################################################
 
 
-
 class CommentCreateSerializer(serializers.ModelSerializer):
     # comment_rating = serializers.SerializerMethodField()
 
@@ -94,12 +93,11 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'text', 'content_type', 'object_id']
         # fields = '__all__'
 
-    # def get_comment_rating(self, instance):
-    #     arr = Rate.objects.filter(id=instance)
-    #     res = 0
-    #     for obj in arr:
-    #         res += obj['count']
-    #     return res
+
+class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        fields = ['id', 'user_id', 'is_like', 'is_dislike', 'date_create', 'date_update', 'content_type', 'object_id']
 
 
 # class RateSerializer(serializers.ModelSerializer):

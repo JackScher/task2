@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from question.models import Question, Answer, Skill, Tag, Comment
+from question.models import Question, Answer, Skill, Tag, Comment, Vote
 
 admin.site.register(Question)
 admin.site.register(Answer)
+admin.site.register(Vote)
 
 admin.site.register(Tag)
 admin.site.register(Skill)

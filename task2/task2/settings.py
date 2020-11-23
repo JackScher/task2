@@ -251,9 +251,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_USERNAME_REQUIRED = True
 
-
 AUTH_USER_MODEL = 'profiles.UserProfile'
 ACCOUNT_ADAPTER = 'profiles.adapters.CustomAdapter'
+
 FRONTEND_HOST = 'http://127.0.0.1:8080/#'
 
 SITE_ID = 1

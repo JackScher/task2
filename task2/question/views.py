@@ -5,9 +5,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from profiles.models import UserProfile
-from question.models import Question, Answer, Comment, Tag, Skill
+from question.models import Question, Answer, Comment, Tag, Skill, Vote
 from question.serializers import QuestionSerializer, TagSerializer, \
-    SkillSerializer, QuestionItemSerializer, QuestionCreateSerializer, AnswerCreateSerializer, CommentCreateSerializer
+    SkillSerializer, QuestionItemSerializer, QuestionCreateSerializer, AnswerCreateSerializer, CommentCreateSerializer, \
+    VoteSerializer
 
 
 class QuestionViewSet(ModelViewSet):
@@ -69,6 +70,61 @@ class CommentViewSet(ModelViewSet):
 
 
 ####################################################################
+
+class VoteViewSet(ModelViewSet):
+    queryset = Vote.objects.all()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    serializer_class = VoteSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            is_voted = Vote.objects.get(user_id=request.data['user_id'], object_id=request.data['object_id'])
+            if request.data['mode'] == 'plus' and is_voted.is_like:
+                return Response({'detail': 'already liked'}, status=status.HTTP_200_OK)
+            if request.data['mode'] == 'minus' and is_voted.is_dislike:
+                return Response({'detail': 'already disliked'}, status=status.HTTP_200_OK)
+            if request.data['mode'] == 'minus' and is_voted.is_like:
+                user = UserProfile.objects.get(id=is_voted.user_id.id)
+                user.rating -= 1
+                user.save()
+                is_voted.is_like = False
+                is_voted.is_dislike = True
+                is_voted.save()
+                return Response({'detail': 'disliked'}, status=status.HTTP_200_OK)
+            if request.data['mode'] == 'plus' and is_voted.is_dislike:
+                user = UserProfile.objects.get(id=is_voted.user_id.id)
+                user.rating += 1
+                user.save()
+                is_voted.is_dislike = False
+                is_voted.is_like = True
+                is_voted.save()
+                return Response({'detail': 'liked'}, status=status.HTTP_200_OK)
+        except:
+            if request.data['mode'] == 'plus':
+                user = UserProfile.objects.get(id=request.data['user_id'])
+                user.rating += 1
+                user.save()
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                res = self.perform_create(serializer)
+                res.is_like = True
+                res.save()
+
+            if request.data['mode'] == 'minus':
+                user = UserProfile.objects.get(id=request.data['user_id'])
+                user.rating -= 1
+                user.save()
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                res = self.perform_create(serializer)
+                res.is_dislike = True
+                res.save()
+
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 # class RateViewSet(ModelViewSet):

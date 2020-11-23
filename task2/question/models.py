@@ -36,15 +36,6 @@ class Answer(DateParent):
     comments = GenericRelation(Comment)
 
 
-# class Rating(models.Model):
-#     value = models.IntegerField(default=1)
-#     # value = models.CharField(max_length=255, default='like')
-#     user_id = models.ManyToManyField(to=settings.AUTH_USER_MODEL)
-#     question_id = models.ManyToManyField(to=Question, blank=True)
-#     answer_id = models.ManyToManyField(to=Answer, blank=True)
-#     comment_id = models.ManyToManyField(to=Comment, blank=True)
-
-
 class Tag(DateParent):
     name = models.CharField(max_length=255)
     question_id = models.ManyToManyField(to=Question, related_name='tags')
@@ -53,3 +44,13 @@ class Tag(DateParent):
 class Skill(models.Model):
     user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tag_id = models.ManyToManyField(to=Tag)
+
+
+class Vote(DateParent):
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_like = models.BooleanField(default=False)
+    is_dislike = models.BooleanField(default=False)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='vote')
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
