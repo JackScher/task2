@@ -12,8 +12,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from profiles.models import UserProfile
-from profiles.serializers import UserProfileSerializer, UpdateUserProfileSerializer
+from profiles.models import UserProfile, StatusChoice
+from profiles.serializers import UserProfileSerializer, UpdateUserProfileSerializer, CustomRegisterSerializer
 
 
 class CustomView(APIView, ConfirmEmailView):
@@ -34,54 +34,111 @@ class ProfileView(ModelViewSet):
     serializer_class = UserProfileSerializer
 
 
-class UpdateUserRatingView(ModelViewSet):
-    queryset = UserProfile.objects.all()
-    permission_classes = (IsAuthenticatedOrReadOnly, )
-    serializer_class = UpdateUserProfileSerializer
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        user = UserProfile.objects.get(id=request.data['id'])
-        event = request.data.get("event")
-        if event == 'plus':
-            user.rating += 1
-            user.save()
-        if event == 'minus':
-            user.rating -= 1
-            user.save()
-        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
-
-
 class RegisterUserProfileView(RegisterView):
-    serializer_class = RegisterSerializer
+    serializer_class = CustomRegisterSerializer
     permission_classes = register_permission_classes()
     token_model = TokenModel
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        print(serializer)
         serializer.is_valid(raise_exception=True)
         user = self.perform_create(serializer)
-        if user.place_of_employment:
-            user.rating += 1
-            user.save()
-        if user.about_yourself:
-            user.rating += 1
-            user.save()
-        if user.location:
-            user.rating += 1
-            user.save()
-        if user.STATUS_CHOICES:
-            print(user.STATUS_CHOICES)
-            user.rating += 1
-            user.save()
-        ###################################################
-        # user.RANK_CHOICES = ('r1', 'Freshman'),
+        print(request)
+
+        # self.create_module('place_of_employment', user, request)
+        # self.create_module('about_yourself', user, request)
+        # self.create_module('location', user, request)
+        # self.create_module('status', user, request)
+        # user.rank = 'Freshman'
         # user.save()
+
+
+        # if request.data['place_of_employment']:
+        #     user.place_of_employment = request.data['place_of_employment']
+        #     user.rating += 1
+        #     user.save()
+        # if request.data['about_yourself']:
+        #     user.about_yourself = request.data['about_yourself']
+        #     user.rating += 1
+        #     user.save()
+        # if request.data['location']:
+        #     user.location = request.data['location']
+        #     user.rating += 1
+        #     user.save()
+        # if request.data['status']:
+        #     user.status = request.data['status']
+        #     user.save
+        # if request.data['status']:
+        #     user.status = self.status_mapping(request.data['status'])
+        #     user.rank = 'Freshman'
+        #     user.rating += 1
+        #     user.save()
 
         headers = self.get_success_headers(serializer.data)
 
         return Response(self.get_response_data(user),
                         status=status.HTTP_201_CREATED,
                         headers=headers)
+
+    def status_mapping(self, status):
+        status_mapping = {
+            'none': StatusChoice.status1,
+            'educating': StatusChoice.status2,
+            'working': StatusChoice.status3
+        }
+        if status:
+            return status_mapping.get(status, StatusChoice.status1)
+        return StatusChoice.status1
+
+    # def create_module(self, name, obj, request):
+    #     if name != 'status':
+    #         if request.data[name]:
+    #             obj.name = request.data[name]
+    #             obj.rating += 1
+    #             # obj.save()
+    #     elif name == 'status':
+    #         obj.name = self.status_mapping(request.data[name])
+    #         obj.rating += 1
+    #         # obj.save()
+
+
+class UpdateUserProfileView(ModelViewSet):
+    queryset = UserProfile.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = UpdateUserProfileSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        print(request.data)
+        user = UserProfile.objects.get(id=request.data['id'])
+        if request.data['username']:
+            user.username = request.data['username']
+            user.save()
+        if user.about_yourself and request.data['about_yourself']:
+            user.about_yourself = request.data['about_yourself']
+            user.save()
+        elif request.data['about_yourself'] and user.about_yourself==None:
+            user.rating += 1
+            user.about_yourself = request.data['about_yourself']
+            user.save()
+
+        if user.place_of_employment and request.data['place_of_employment']:
+            user.place_of_employment = request.data['place_of_employment']
+            user.save()
+        elif request.data['place_of_employment'] and user.place_of_employment==None:
+            user.rating += 1
+            user.place_of_employment = request.data['place_of_employment']
+            user.save()
+
+        if user.location and request.data['location']:
+            user.location = request.data['location']
+            user.save()
+        elif request.data['location'] and user.location==None:
+            user.rating += 1
+            user.location = request.data['location']
+            user.save()
+
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)

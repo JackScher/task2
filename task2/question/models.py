@@ -47,7 +47,8 @@ class Skill(models.Model):
 
 
 class Vote(DateParent):
-    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    voter = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='voter', default=1)
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vote')
     is_like = models.BooleanField(default=False)
     is_dislike = models.BooleanField(default=False)
 

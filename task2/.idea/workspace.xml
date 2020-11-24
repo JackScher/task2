@@ -32,22 +32,13 @@
       <change beforePath="$PROJECT_DIR$/../front/task2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/profiles/adapters.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/adapters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/migrations/0002_userprofile_rating.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/profiles/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/profiles/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/profiles/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/profiles/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/question/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/question/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/question/migrations/0002_auto_20201120_1045.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/question/migrations/0003_auto_20201120_1047.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/question/migrations/0004_delete_rating.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/question/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/question/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/question/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/question/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/question/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/task2/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/task2/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,6 +129,7 @@
       <workItem from="1605867696190" duration="16121000" />
       <workItem from="1606119041090" duration="4342000" />
       <workItem from="1606123391212" duration="24486000" />
+      <workItem from="1606205525416" duration="25022000" />
     </task>
     <servers />
   </component>

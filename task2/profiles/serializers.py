@@ -26,14 +26,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
-                  'RANK_CHOICES', 'STATUS_CHOICES', 'answers', 'questions', 'rating']
+                  'rank', 'status', 'answers', 'questions', 'rating']
 
 
 class UserIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id']
-        # fields = '__all__'
 
 
 class MyCustomTokenSerializer(serializers.ModelSerializer):
@@ -44,23 +43,33 @@ class MyCustomTokenSerializer(serializers.ModelSerializer):
         fields = ('key', 'user')
 
 
+class CustomRegisterSerializer(RegisterSerializer):
+    # class Meta:
+    #     model = UserProfile
+    #     fields = ('place_of_employment', 'about_yourself', 'location', 'status')
+
+    status = serializers.CharField()
+    rank = serializers.CharField()
+
+    place_of_employment = serializers.CharField()
+    about_yourself = serializers.CharField()
+    location = serializers.CharField()
+    rating = serializers.IntegerField()
+
+    def get_cleaned_data(self):
+        return {
+            'status': self.validated_data.get('status', ''),
+            'rank': self.validated_data.get('rank', ''),
+            'place_of_employment': self.validated_data.get('place_of_employment', ''),
+            'about_yourself': self.validated_data.get('about_yourself', ''),
+            'location': self.validated_data.get('location', ''),
+            # 'rating': self.validated_data.get('rating', ''),
+        }
+
+
+
 class UpdateUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
-                  'STATUS_CHOICES']
-
-
-# # class CustomRegisterSerializer(RegisterSerializer):
-# #     def get_cleaned_data(self):
-# #         print('it`s get cleaned data in adapter!')
-# #         username = self.validated_data.get('username', '')
-# #         print('validated_data.get(about_yourself): ', username)
-# #         return {
-# #             'username': self.validated_data.get('username', ''),
-# #             'password1': self.validated_data.get('password1', ''),
-# #             'email': self.validated_data.get('email', ''),
-# #             'about_yourself': self.validated_data.get('about_yourself', ''),
-# #             'location': self.validated_data.get('location', ''),
-# #             'place_of_employment': self.validated_data.get('place_of_employment', '')
-# #         }
+                  'status', 'rank']

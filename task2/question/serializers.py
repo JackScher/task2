@@ -97,7 +97,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
-        fields = ['id', 'user_id', 'is_like', 'is_dislike', 'date_create', 'date_update', 'content_type', 'object_id']
+        fields = ['id', 'voter', 'user_id', 'is_like', 'is_dislike', 'date_create', 'date_update', 'content_type', 'object_id']
 
 
 # class RateSerializer(serializers.ModelSerializer):
