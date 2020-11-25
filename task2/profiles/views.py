@@ -41,39 +41,8 @@ class RegisterUserProfileView(RegisterView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(serializer)
         serializer.is_valid(raise_exception=True)
         user = self.perform_create(serializer)
-        print(request)
-
-        # self.create_module('place_of_employment', user, request)
-        # self.create_module('about_yourself', user, request)
-        # self.create_module('location', user, request)
-        # self.create_module('status', user, request)
-        # user.rank = 'Freshman'
-        # user.save()
-
-
-        # if request.data['place_of_employment']:
-        #     user.place_of_employment = request.data['place_of_employment']
-        #     user.rating += 1
-        #     user.save()
-        # if request.data['about_yourself']:
-        #     user.about_yourself = request.data['about_yourself']
-        #     user.rating += 1
-        #     user.save()
-        # if request.data['location']:
-        #     user.location = request.data['location']
-        #     user.rating += 1
-        #     user.save()
-        # if request.data['status']:
-        #     user.status = request.data['status']
-        #     user.save
-        # if request.data['status']:
-        #     user.status = self.status_mapping(request.data['status'])
-        #     user.rank = 'Freshman'
-        #     user.rating += 1
-        #     user.save()
 
         headers = self.get_success_headers(serializer.data)
 
@@ -81,26 +50,15 @@ class RegisterUserProfileView(RegisterView):
                         status=status.HTTP_201_CREATED,
                         headers=headers)
 
-    def status_mapping(self, status):
-        status_mapping = {
-            'none': StatusChoice.status1,
-            'educating': StatusChoice.status2,
-            'working': StatusChoice.status3
-        }
-        if status:
-            return status_mapping.get(status, StatusChoice.status1)
-        return StatusChoice.status1
-
-    # def create_module(self, name, obj, request):
-    #     if name != 'status':
-    #         if request.data[name]:
-    #             obj.name = request.data[name]
-    #             obj.rating += 1
-    #             # obj.save()
-    #     elif name == 'status':
-    #         obj.name = self.status_mapping(request.data[name])
-    #         obj.rating += 1
-    #         # obj.save()
+    # def status_mapping(self, status):
+    #     status_mapping = {
+    #         'none': StatusChoice.status1,
+    #         'educating': StatusChoice.status2,
+    #         'working': StatusChoice.status3
+    #     }
+    #     if status:
+    #         return status_mapping.get(status, StatusChoice.status1)
+    #     return StatusChoice.status1
 
 
 class UpdateUserProfileView(ModelViewSet):

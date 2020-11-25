@@ -5,7 +5,7 @@ from django.db import models
 
 
 class DateParent(models.Model):
-    date_create = models.DateTimeField(auto_now_add=True)
+    date_create = models.DateTimeField(auto_now_add=True)                           #, format=settings.REST_FRAMEWORK['DATETIME_FORMAT']
     date_update = models.DateTimeField(auto_now=True)
 
     class Meta:
