@@ -70,33 +70,26 @@ class UpdateUserProfileView(ModelViewSet):
         return self.update(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        print(request.data)
         user = UserProfile.objects.get(id=request.data['id'])
+        if request.data['status']:
+            user.status = request.data['status']
         if request.data['username']:
             user.username = request.data['username']
-            user.save()
         if user.about_yourself and request.data['about_yourself']:
             user.about_yourself = request.data['about_yourself']
-            user.save()
         elif request.data['about_yourself'] and user.about_yourself==None:
             user.rating += 1
             user.about_yourself = request.data['about_yourself']
-            user.save()
-
         if user.place_of_employment and request.data['place_of_employment']:
             user.place_of_employment = request.data['place_of_employment']
-            user.save()
         elif request.data['place_of_employment'] and user.place_of_employment==None:
             user.rating += 1
             user.place_of_employment = request.data['place_of_employment']
-            user.save()
-
         if user.location and request.data['location']:
             user.location = request.data['location']
-            user.save()
         elif request.data['location'] and user.location==None:
             user.rating += 1
             user.location = request.data['location']
-            user.save()
+        user.save()
 
         return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
