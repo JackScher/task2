@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
 from question.views import QuestionViewSet, AnswerCreateView, CommentViewSet, TagViewSet, SkillViewSet, \
-    QuestionItemViewSet, QuestionCreateView, VoteViewSet
+    QuestionItemViewSet, QuestionCreateView, VoteViewSet, TagUpdateViewSet, RemoveTagRelation
 
 router = DefaultRouter()
 router.register('api/answer/create', AnswerCreateView)
@@ -15,7 +15,9 @@ router.register('api/question/create', QuestionCreateView)
 router.register('api/comment/create', CommentViewSet)
 
 # router.register('api/rate', RateViewSet)
-router.register('api/tag', TagViewSet)
+router.register('api/tags', TagViewSet)
+router.register('api/tag/update', TagUpdateViewSet)
+router.register('api/tag/remove', RemoveTagRelation)
 router.register('api/skills', SkillViewSet)
 
 

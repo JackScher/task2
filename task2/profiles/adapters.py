@@ -29,22 +29,22 @@ class CustomAdapter(DefaultAccountAdapter):
         username = data.get("username")
         user_email(user, email)
         user_username(user, username)
-        status = data.get("status")
-        place_of_employment = data.get("place_of_employment")
-        about_yourself = data.get("about_yourself")
-        location = data.get("location")
+        # status = data.get("status")
+        # place_of_employment = data.get("place_of_employment")
+        # about_yourself = data.get("about_yourself")
+        # location = data.get("location")
         if first_name:
             user_field(user, "first_name", first_name)
         if last_name:
             user_field(user, "last_name", last_name)
-        if status:
-            user_field(user, "status", status)
-        if place_of_employment:
-            user_field(user, "place_of_employment", place_of_employment)
-        if about_yourself:
-            user_field(user, "about_yourself", about_yourself)
-        if location:
-            user_field(user, "location", location)
+        # if status:
+        #     user_field(user, "status", status)
+        # if place_of_employment:
+        #     user_field(user, "place_of_employment", place_of_employment)
+        # if about_yourself:
+        #     user_field(user, "about_yourself", about_yourself)
+        # if location:
+        #     user_field(user, "location", location)
         if "password1" in data:
             user.set_password(data["password1"])
         else:

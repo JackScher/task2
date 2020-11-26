@@ -11,7 +11,7 @@ from profiles.models import UserProfile
 from question.models import Question, Answer, Comment, Tag, Skill, Vote
 from question.serializers import QuestionSerializer, TagSerializer, \
     SkillSerializer, QuestionItemSerializer, QuestionCreateSerializer, AnswerCreateSerializer, CommentCreateSerializer, \
-    VoteSerializer
+    VoteSerializer, TagUpdateSerializer, RemoveTagRelationSerializer
 
 
 class QuestionViewSet(ModelViewSet):
@@ -81,153 +81,80 @@ class VoteViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         voter = UserProfile.objects.get(id=request.data['voter'])
-        if voter.rating > 50:
-            try:
-                is_voted = Vote.objects.get(voter=request.data['voter'], object_id=request.data['object_id'])
-                cant_vote = self.check_revote(is_voted)
-                if cant_vote:
-                    return cant_vote
-                if request.data['mode'] == 'plus' and is_voted.is_like:
-                    return Response({'detail': 'already liked'}, status=status.HTTP_200_OK)
-                if request.data['mode'] == 'minus' and is_voted.is_dislike:
-                    return Response({'detail': 'already disliked'}, status=status.HTTP_200_OK)
-                if request.data['mode'] == 'minus' and is_voted.is_like:
-                    user = UserProfile.objects.get(id=request.data['user_id'])
-                    user.rating -= 1
-                    user.save()
-                    is_voted.is_like = False
-                    is_voted.is_dislike = True
-                    is_voted.save()
-                    return Response({'detail': 'disliked'}, status=status.HTTP_200_OK)
-                if request.data['mode'] == 'plus' and is_voted.is_dislike:
-                    user = UserProfile.objects.get(id=request.data['user_id'])
-                    user.rating += 1
-                    user.save()
-                    is_voted.is_dislike = False
-                    is_voted.is_like = True
-                    is_voted.save()
-                    return Response({'detail': 'liked'}, status=status.HTTP_200_OK)
-            except:
-                if request.data['detail'] == 'question':
-                    cant_vote = self.check_create_time(request)
-                    if cant_vote:
-                        return cant_vote
-                if request.data['user_id'] == int(request.data['voter']):
-                    return Response({'detail': 'it`s yours'}, status=status.HTTP_200_OK)
-                if request.data['mode'] == 'plus':
-                    user = UserProfile.objects.get(id=request.data['user_id'])
-                    user.rating += 1
-                    user.save()
-                    serializer = self.get_serializer(data=request.data)
-                    serializer.is_valid(raise_exception=True)
-                    res = self.perform_create(serializer)
-                    res.is_like = True
-                    res.save()
-                if request.data['mode'] == 'minus':
-                    user = UserProfile.objects.get(id=request.data['user_id'])
-                    user.rating -= 1
-                    user.save()
-                    serializer = self.get_serializer(data=request.data)
-                    serializer.is_valid(raise_exception=True)
-                    res = self.perform_create(serializer)
-                    res.is_dislike = True
-                    res.save()
-
-                headers = self.get_success_headers(serializer.data)
-                return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        else:
+        if voter.rating < 50:
             return Response({'detail': 'low rating'}, status=status.HTTP_200_OK)
-        # try:
-        #     is_voted = Vote.objects.get(voter=request.data['voter'], object_id=request.data['object_id'])
-        #     cant_vote = self.check_revote(is_voted)
-        #     if cant_vote:
-        #         return cant_vote
-        #     if request.data['mode'] == 'plus' and is_voted.is_like:
-        #         return Response({'detail': 'already liked'}, status=status.HTTP_200_OK)
-        #     if request.data['mode'] == 'minus' and is_voted.is_dislike:
-        #         return Response({'detail': 'already disliked'}, status=status.HTTP_200_OK)
-        #     if request.data['mode'] == 'minus' and is_voted.is_like:
-        #         user = UserProfile.objects.get(id=request.data['user_id'])
-        #         user.rating -= 1
-        #         user.save()
-        #         is_voted.is_like = False
-        #         is_voted.is_dislike = True
-        #         is_voted.save()
-        #         return Response({'detail': 'disliked'}, status=status.HTTP_200_OK)
-        #     if request.data['mode'] == 'plus' and is_voted.is_dislike:
-        #         user = UserProfile.objects.get(id=request.data['user_id'])
-        #         user.rating += 1
-        #         user.save()
-        #         is_voted.is_dislike = False
-        #         is_voted.is_like = True
-        #         is_voted.save()
-        #         return Response({'detail': 'liked'}, status=status.HTTP_200_OK)
-        # except:
-        #     if request.data['detail'] == 'question':
-        #         cant_vote = self.check_create_time(request)
-        #         if cant_vote:
-        #             return cant_vote
-        #     if request.data['user_id'] == int(request.data['voter']):
-        #         return Response({'detail': 'it`s yours'}, status=status.HTTP_200_OK)
-        #     if request.data['mode'] == 'plus':
-        #         user = UserProfile.objects.get(id=request.data['user_id'])
-        #         user.rating += 1
-        #         user.save()
-        #         serializer = self.get_serializer(data=request.data)
-        #         serializer.is_valid(raise_exception=True)
-        #         res = self.perform_create(serializer)
-        #         res.is_like = True
-        #         res.save()
-        #     if request.data['mode'] == 'minus':
-        #         user = UserProfile.objects.get(id=request.data['user_id'])
-        #         user.rating -= 1
-        #         user.save()
-        #         serializer = self.get_serializer(data=request.data)
-        #         serializer.is_valid(raise_exception=True)
-        #         res = self.perform_create(serializer)
-        #         res.is_dislike = True
-        #         res.save()
-        #
-        #     headers = self.get_success_headers(serializer.data)
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        try:
+            is_voted = Vote.objects.get(voter=int(request.data['voter']), object_id=request.data['object_id'])
+        except:
+            is_voted = None
+        if is_voted:
+            if self.check_revote(is_voted):
+                return self.check_revote(is_voted)
+            result = self.is_voted_check(request.data['action'], is_voted)
+            if result:
+                return Response({'detail': result}, status=status.HTTP_200_OK)
+            result = self.is_voted_change(request, is_voted)
+            if result:
+                return Response({'detail': result}, status=status.HTTP_200_OK)
+        if request.data['detail'] == 'question':
+            if self.check_create_time(request):
+                return self.check_create_time(request)
+        if self.self_check(request):
+            return self.self_check(request)
+        result = self.create_vote(request)
+        headers = self.get_success_headers(result.data)
+        return Response(result.data, status=status.HTTP_201_CREATED, headers=headers)
 
-########################################################################################################################
-    # def is_voted_check(self, mode, obj):
-    #     mess = None
-    #     if mode == 'plus' and obj.is_like:
-    #         mess = 'already liked'
-    #     elif mode == 'minus' and obj.is_dislike:
-    #         mess = 'already disliked'
-    #     return mess
-    #
-    # def is_voted_change(self, request, obj):
-    #     user = UserProfile.objects.get(id=request.data['user_id'])
-    #     if request.data['mode'] == 'plus':
-    #         user.rating += 1
-    #         mess = 'liked'
-    #     else:
-    #         user.rating -= 1
-    #         mess = 'disliked'
-    #     user.save()
-    #     obj.is_dislike, obj.is_like = obj.is_like, obj.is_dislike
-    #     obj.save()
-    #     return mess
-    #
-    # def create_vote(self, request):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     res = self.perform_create(serializer)
-    #     res.save()
-    #     user = UserProfile.objects.get(id=request.data['user_id'])
-    #     if request.data['mode'] == 'plus':
-    #         user.rating += 1
-    #         res.is_like = True
-    #     else:
-    #         user.rating -= 1
-    #         res.is_dislike = True
-    #     user.save()
-    #     return serializer
-########################################################################################################################
+    def self_check(self, request):
+        user = self.get_user(request)
+        if int(request.data['voter']) == user.id:
+            return Response({'detail': 'It`s yours!'}, status=status.HTTP_200_OK)
+
+    def get_user(self, request):
+        current_object = self.get_current_object(request)
+        user = UserProfile.objects.get(id=current_object.user_id.id)
+        return user
+
+    def is_voted_check(self, mode, obj):
+        mess = None
+        if mode == 'up' and obj.action == 'up':
+            mess = 'already liked'
+        elif mode == 'down' and obj.action == 'down':
+            mess = 'already disliked'
+        return mess
+
+    def is_voted_change(self, request, obj):
+        mess = self.rate_user(request)
+        self.reverce_action(obj)
+        return mess
+
+    def reverce_action(self, obj):
+        if obj.action == 'up':
+            obj.action = 'down'
+        else:
+            obj.action = 'up'
+        obj.save()
+        return obj
+
+    def create_vote(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        res = self.perform_create(serializer)
+        res.save()
+        self.rate_user(request)
+
+        return serializer
+
+    def rate_user(self, request):
+        user = self.get_user(request)
+        if request.data['action'] == 'up':
+            user.rating += 1
+            mess = 'liked'
+        else:
+            user.rating -= 1
+            mess = 'disliked'
+        user.save()
+        return mess
 
     def perform_create(self, serializer):
         return serializer.save()
@@ -259,14 +186,48 @@ class VoteViewSet(ModelViewSet):
 
     def return_result(self, difference, delta):
         if difference > delta:
-            return Response({'detail': 'can`t vote'}, status=status.HTTP_200_OK)
+            return Response({'detail': 'can`t vote because of time'}, status=status.HTTP_200_OK)
         return None
 
 
 class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
-    permission_classes = (AllowAny, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
     serializer_class = TagSerializer
+
+
+class TagUpdateViewSet(ModelViewSet):
+    queryset = Tag.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = TagUpdateSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        # partial = kwargs.pop('partial', False)
+        instance = Tag.objects.get(id=request.data['id'])
+        question = Question.objects.get(id=request.data['question_id'])
+        instance.question_id.add(question)
+        return Response({'detail': 'updated'}, status=status.HTTP_200_OK)
+
+
+class RemoveTagRelation(ModelViewSet):
+    queryset = Tag.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = RemoveTagRelationSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        # partial = kwargs.pop('partial', False)
+        instance = Tag.objects.get(id=request.data['id'])
+        # print(instance)
+        # print(instance.question_id)
+        # print(type(instance.question_id))
+        instance.question_id.remove(request.data['question_id'])
+        return Response({'detail': 'updated'}, status=status.HTTP_200_OK)
 
 
 class SkillViewSet(ModelViewSet):

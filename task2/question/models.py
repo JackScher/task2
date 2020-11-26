@@ -38,7 +38,7 @@ class Answer(DateParent):
 
 class Tag(DateParent):
     name = models.CharField(max_length=255)
-    question_id = models.ManyToManyField(to=Question, related_name='tags')
+    question_id = models.ManyToManyField(to=Question, related_name='tags', blank=True)
 
 
 class Skill(models.Model):
@@ -48,9 +48,10 @@ class Skill(models.Model):
 
 class Vote(DateParent):
     voter = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='voter', default=1)
-    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vote')
-    is_like = models.BooleanField(default=False)
-    is_dislike = models.BooleanField(default=False)
+    # user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vote')
+    # is_like = models.BooleanField(default=False)
+    # is_dislike = models.BooleanField(default=False)
+    action = models.CharField(max_length=255, default='up')
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='vote')
     object_id = models.PositiveIntegerField()

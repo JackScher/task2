@@ -49,6 +49,9 @@ class CustomRegisterSerializer(RegisterSerializer):
     about_yourself = serializers.CharField(required=True, allow_blank=True)
     location = serializers.CharField(required=True, allow_blank=True)
 
+    # class Meta(RegisterSerializer.Meta):
+    #     fields = ('status', 'place_of_employment', 'about_yourself', 'location')
+
     def get_cleaned_data(self):
         return {
             'username': self.validated_data.get('username', ''),

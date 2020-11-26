@@ -50,16 +50,6 @@ class RegisterUserProfileView(RegisterView):
                         status=status.HTTP_201_CREATED,
                         headers=headers)
 
-    # def status_mapping(self, status):
-    #     status_mapping = {
-    #         'none': StatusChoice.status1,
-    #         'educating': StatusChoice.status2,
-    #         'working': StatusChoice.status3
-    #     }
-    #     if status:
-    #         return status_mapping.get(status, StatusChoice.status1)
-    #     return StatusChoice.status1
-
 
 class UpdateUserProfileView(ModelViewSet):
     queryset = UserProfile.objects.all()
@@ -71,7 +61,7 @@ class UpdateUserProfileView(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         user = UserProfile.objects.get(id=request.data['id'])
-        if request.data['status']:
+        if request.data.get('status'):
             user.status = request.data['status']
         if request.data['username']:
             user.username = request.data['username']
