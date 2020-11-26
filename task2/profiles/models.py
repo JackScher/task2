@@ -23,15 +23,3 @@ class UserProfile(AbstractUser):
     about_yourself = models.TextField(null=True)
     location = models.CharField(max_length=255, null=True)
     rating = models.IntegerField(default=10)
-
-    # def status_mapping(self, status):
-    #     status_mapping = {
-    #         'none': StatusChoice.status1,
-    #         'educating': StatusChoice.status2,
-    #         'working': StatusChoice.status3
-    #     }
-    #     if status:
-    #         return status_mapping.get(status, StatusChoices.status1)
-    #     return StatusChoices.status1
-    #
-    # status = self.status_mapping(self._data.get('status', {}).get('status'))

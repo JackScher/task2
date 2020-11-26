@@ -108,9 +108,10 @@ class VoteViewSet(ModelViewSet):
                     is_voted.save()
                     return Response({'detail': 'liked'}, status=status.HTTP_200_OK)
             except:
-                cant_vote = self.check_create_time(request)
-                if cant_vote:
-                    return cant_vote
+                if request.data['detail'] == 'question':
+                    cant_vote = self.check_create_time(request)
+                    if cant_vote:
+                        return cant_vote
                 if request.data['user_id'] == int(request.data['voter']):
                     return Response({'detail': 'it`s yours'}, status=status.HTTP_200_OK)
                 if request.data['mode'] == 'plus':
@@ -162,9 +163,10 @@ class VoteViewSet(ModelViewSet):
         #         is_voted.save()
         #         return Response({'detail': 'liked'}, status=status.HTTP_200_OK)
         # except:
-        #     cant_vote = self.check_create_time(request)
-        #     if cant_vote:
-        #         return cant_vote
+        #     if request.data['detail'] == 'question':
+        #         cant_vote = self.check_create_time(request)
+        #         if cant_vote:
+        #             return cant_vote
         #     if request.data['user_id'] == int(request.data['voter']):
         #         return Response({'detail': 'it`s yours'}, status=status.HTTP_200_OK)
         #     if request.data['mode'] == 'plus':
@@ -231,11 +233,18 @@ class VoteViewSet(ModelViewSet):
         return serializer.save()
 
     def check_create_time(self, request):
-        q_create = Question.objects.get(id=request.data['object_id'])
-        date, date_now = self.convert(q_create)
+        create = self.get_current_object(request)
+        date, date_now = self.convert(create)
         difference = date_now-date
         delta = timedelta(days=30)
         return self.return_result(difference, delta)
+
+    def get_current_object(self, request):
+        if request.data['detail'] == 'question':
+            result = Question.objects.get(id=request.data['object_id'])
+        elif request.data['detail'] == 'answer':
+            result = Answer.objects.get(id=request.data['object_id'])
+        return result
 
     def check_revote(self, voted):
         date, date_now = self.convert(voted)
