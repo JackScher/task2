@@ -19,6 +19,7 @@ class Comment(DateParent):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='comments')
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+    # comments = GenericRelation(super)
 
 
 class Question(DateParent):
@@ -33,6 +34,7 @@ class Answer(DateParent):
     body = models.TextField()
     user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='answers')
     question_id = models.ForeignKey(to=Question, on_delete=models.CASCADE, related_name='answers')
+
     comments = GenericRelation(Comment)
 
 
@@ -48,9 +50,6 @@ class Skill(models.Model):
 
 class Vote(DateParent):
     voter = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='voter', default=1)
-    # user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vote')
-    # is_like = models.BooleanField(default=False)
-    # is_dislike = models.BooleanField(default=False)
     action = models.CharField(max_length=255, default='up')
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='vote')

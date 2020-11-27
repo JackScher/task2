@@ -83,10 +83,15 @@ class AnswerCreateSerializer(serializers.ModelSerializer):
 
 
 ###################################################################################
+# class CommentCommentModuleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Comment
+#         fields = ['id', 'text', 'content_type', 'object_id', 'user_id']
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     # comment_rating = serializers.SerializerMethodField()
+    # comment = CommentCommentModuleSerializer(many=True)
 
     class Meta:
         model = Comment

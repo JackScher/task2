@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from profiles.models import UserProfile, StatusChoice
-from profiles.serializers import UserProfileSerializer, UpdateUserProfileSerializer, CustomRegisterSerializer
+from profiles.serializers import UserProfileSerializer, UpdateUserProfileSerializer
 
 
 class CustomView(APIView, ConfirmEmailView):
@@ -35,14 +35,13 @@ class ProfileView(ModelViewSet):
 
 
 class RegisterUserProfileView(RegisterView):
-    serializer_class = CustomRegisterSerializer
+    serializer_class = RegisterSerializer
     permission_classes = register_permission_classes()
     token_model = TokenModel
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer)
         user = self.perform_create(serializer)
 
         user_status = request.data.get("status")
@@ -85,7 +84,6 @@ class RegisterUserProfileView(RegisterView):
             if res:
                 user.rating += 1
         user.save()
-
 
 
 class UpdateUserProfileView(ModelViewSet):

@@ -42,13 +42,9 @@ class MyCustomTokenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Token
+        # fields = ('key', 'user', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
+        #           'status', 'rank')
         fields = ('key', 'user')
-
-
-class CustomRegisterSerializer(RegisterSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ('username', 'password1', 'email', 'status', 'place_of_employment', 'about_yourself', 'location')
 
 
 class UpdateUserProfileSerializer(serializers.ModelSerializer):
