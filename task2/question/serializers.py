@@ -16,7 +16,15 @@ class UserProfileModuleSerializer(serializers.ModelSerializer):
         fields = ['id', 'username']
 
 
+# class CommentCommentModuleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Comment
+#         fields = ['id', 'text', 'content_type', 'object_id', 'user_id']
+
+
 class CommentModuleSerializer(serializers.ModelSerializer):
+    # object_id = CommentCommentModuleSerializer(many=True)
+
     class Meta:
         model = Comment
         fields = ['id', 'text']
@@ -83,15 +91,11 @@ class AnswerCreateSerializer(serializers.ModelSerializer):
 
 
 ###################################################################################
-# class CommentCommentModuleSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Comment
-#         fields = ['id', 'text', 'content_type', 'object_id', 'user_id']
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     # comment_rating = serializers.SerializerMethodField()
-    # comment = CommentCommentModuleSerializer(many=True)
+    # object_id = CommentCommentModuleSerializer(many=True)
 
     class Meta:
         model = Comment
