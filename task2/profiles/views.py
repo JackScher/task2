@@ -42,13 +42,50 @@ class RegisterUserProfileView(RegisterView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        print(serializer)
         user = self.perform_create(serializer)
+
+        user_status = request.data.get("status")
+        place_of_employment = request.data.get("place_of_employment")
+        about_yourself = request.data.get("about_yourself")
+        location = request.data.get("location")
+
+        if user_status:
+            user.status = user_status
+        if place_of_employment:
+            user.place_of_employment = place_of_employment
+        if about_yourself:
+            user.about_yourself = about_yourself
+        if location:
+            user.location = location
+
+        self.add_rating(user)
 
         headers = self.get_success_headers(serializer.data)
 
         return Response(self.get_response_data(user),
                         status=status.HTTP_201_CREATED,
                         headers=headers)
+
+    def mapping_for_rating(self, user, field):
+        rating_mapping = {
+            'status': user.status,
+            'place_of_employment': user.place_of_employment,
+            'about_yourself': user.about_yourself,
+            'location': user.location
+        }
+        if field:
+            return rating_mapping.get(field, None)
+        return None
+
+    def add_rating(self, user):
+        keys = user.__dict__.keys()
+        for key in keys:
+            res = self.mapping_for_rating(user, key)
+            if res:
+                user.rating += 1
+        user.save()
+
 
 
 class UpdateUserProfileView(ModelViewSet):
@@ -63,21 +100,21 @@ class UpdateUserProfileView(ModelViewSet):
         user = UserProfile.objects.get(id=request.data['id'])
         if request.data.get('status'):
             user.status = request.data['status']
-        if request.data['username']:
+        if request.data.get('username'):
             user.username = request.data['username']
-        if user.about_yourself and request.data['about_yourself']:
+        if user.about_yourself and request.data.get('about_yourself'):
             user.about_yourself = request.data['about_yourself']
-        elif request.data['about_yourself'] and user.about_yourself==None:
+        elif request.data.get('about_yourself') and not user.about_yourself:
             user.rating += 1
             user.about_yourself = request.data['about_yourself']
-        if user.place_of_employment and request.data['place_of_employment']:
+        if user.place_of_employment and request.data.get('place_of_employment'):
             user.place_of_employment = request.data['place_of_employment']
-        elif request.data['place_of_employment'] and user.place_of_employment==None:
+        elif request.data.get('place_of_employment') and not user.place_of_employment:
             user.rating += 1
             user.place_of_employment = request.data['place_of_employment']
-        if user.location and request.data['location']:
+        if user.location and request.data.get('location'):
             user.location = request.data['location']
-        elif request.data['location'] and user.location==None:
+        elif request.data.get('location') and not user.location:
             user.rating += 1
             user.location = request.data['location']
         user.save()

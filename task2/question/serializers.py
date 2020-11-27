@@ -19,7 +19,7 @@ class UserProfileModuleSerializer(serializers.ModelSerializer):
 class CommentModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ['id', 'text']
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -90,7 +90,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'text', 'content_type', 'object_id']
+        fields = ['id', 'text', 'content_type', 'object_id', 'user_id']
         # fields = '__all__'
 
 
@@ -113,6 +113,12 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class TagUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('id', 'name', 'question_id')
+
+
+class TagDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('id', 'name', 'question_id')

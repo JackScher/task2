@@ -11,7 +11,7 @@ from profiles.models import UserProfile
 from question.models import Question, Answer, Comment, Tag, Skill, Vote
 from question.serializers import QuestionSerializer, TagSerializer, \
     SkillSerializer, QuestionItemSerializer, QuestionCreateSerializer, AnswerCreateSerializer, CommentCreateSerializer, \
-    VoteSerializer, TagUpdateSerializer, RemoveTagRelationSerializer
+    VoteSerializer, TagUpdateSerializer, RemoveTagRelationSerializer, TagDeleteSerializer
 
 
 class QuestionViewSet(ModelViewSet):
@@ -66,7 +66,6 @@ class AnswerCreateView(ModelViewSet):
 
 
 class CommentViewSet(ModelViewSet):
-    # allowed_methods = ('GET', 'PUT', 'POST', 'HEAD', 'OPTIONS')
     queryset = Comment.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly, )
     serializer_class = CommentCreateSerializer
@@ -81,7 +80,7 @@ class VoteViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         voter = UserProfile.objects.get(id=request.data['voter'])
-        if voter.rating < 50:
+        if voter.rating < 10:
             return Response({'detail': 'low rating'}, status=status.HTTP_200_OK)
         try:
             is_voted = Vote.objects.get(voter=int(request.data['voter']), object_id=request.data['object_id'])
@@ -171,6 +170,8 @@ class VoteViewSet(ModelViewSet):
             result = Question.objects.get(id=request.data['object_id'])
         elif request.data['detail'] == 'answer':
             result = Answer.objects.get(id=request.data['object_id'])
+        elif request.data['detail'] == 'comment':
+            result = Comment.objects.get(id=request.data['object_id'])
         return result
 
     def check_revote(self, voted):
@@ -210,6 +211,20 @@ class TagUpdateViewSet(ModelViewSet):
         question = Question.objects.get(id=request.data['question_id'])
         instance.question_id.add(question)
         return Response({'detail': 'updated'}, status=status.HTTP_200_OK)
+
+
+class TagDeleteViewSet(ModelViewSet):
+    queryset = Tag.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = TagDeleteSerializer
+
+    def put(self, request, *args, **kwargs):
+        print('in put')
+        return self.retrieve(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = Tag.objects.get(id=request.data['id']).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RemoveTagRelation(ModelViewSet):
