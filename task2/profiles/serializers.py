@@ -12,13 +12,13 @@ from question.models import Answer, Question
 class AnswerModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['id', 'title', 'body']
+        fields = ['id', 'title', 'body', 'user_id']
 
 
 class QuestionsModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['id', 'title', 'body']
+        fields = ['id', 'title', 'body', 'user_id']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -28,13 +28,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'password', 'email', 'avatar', 'place_of_employment', 'about_yourself', 'location',
-                  'rank', 'status', 'answers', 'questions', 'rating']
+                  'rank', 'status', 'answers', 'questions', 'rating', 'user_group']
 
 
 class UserIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id']
+        fields = ['id', 'user_group']
 
 
 class MyCustomTokenSerializer(serializers.ModelSerializer):

@@ -18,8 +18,10 @@ class UserProfile(AbstractUser):
     status = models.CharField(max_length=9, choices=StatusChoice.choices, default=StatusChoice.status1)
     rank = models.CharField(max_length=11, choices=RankChoices.choices, default=RankChoices.rank1)
 
-    avatar = models.ImageField(null=True)
-    place_of_employment = models.CharField(max_length=255, null=True)
-    about_yourself = models.TextField(null=True)
-    location = models.CharField(max_length=255, null=True)
+    avatar = models.ImageField(null=True, blank=True)
+    place_of_employment = models.CharField(max_length=255, null=True, blank=True)
+    about_yourself = models.TextField(null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
     rating = models.IntegerField(default=10)
+    user_group = models.CharField(max_length=255, default='usual_user')
+

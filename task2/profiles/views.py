@@ -118,3 +118,4 @@ class UpdateUserProfileView(ModelViewSet):
         user.save()
 
         return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
+

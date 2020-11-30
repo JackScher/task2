@@ -11,13 +11,35 @@ from profiles.models import UserProfile
 from question.models import Question, Answer, Comment, Tag, Skill, Vote
 from question.serializers import QuestionSerializer, TagSerializer, \
     SkillSerializer, QuestionItemSerializer, QuestionCreateSerializer, AnswerCreateSerializer, CommentCreateSerializer, \
-    VoteSerializer, TagUpdateSerializer, RemoveTagRelationSerializer, TagDeleteSerializer
+    VoteSerializer, TagUpdateSerializer, RemoveTagRelationSerializer, TagDeleteSerializer, ModeratorQuestionSerializer, \
+    ModeratorAnswerSerializer
 
 
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly, )
     serializer_class = QuestionSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        check = self.check_user_id(request)
+        if check:
+            return check
+        question = Question.objects.get(id=request.data['id'])
+        title = request.data.get('title')
+        body = request.data.get('body')
+        if title:
+            question.title = title
+        if body:
+            question.body = body
+        question.save()
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
+
+    def check_user_id(self, request):
+        if request.data['user_id'] != int(request.data['current_user_id']):
+            return Response({'detail': ('not yours')}, status=status.HTTP_200_OK)
 
 
 class QuestionItemViewSet(ModelViewSet):
@@ -43,6 +65,8 @@ class QuestionCreateView(ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 ####################################################################
 
@@ -62,6 +86,27 @@ class AnswerCreateView(ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        check = self.check_user_id(request)
+        if check:
+            return check
+        answer = Answer.objects.get(id=request.data['id'])
+        title = request.data.get('title')
+        body = request.data.get('body')
+        if title:
+            answer.title = title
+        if body:
+            answer.body = body
+        answer.save()
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
+
+    def check_user_id(self, request):
+        if request.data['user_id'] != int(request.data['current_user_id']):
+            return Response({'detail': ('not yours')}, status=status.HTTP_200_OK)
+
 ####################################################################
 
 
@@ -69,6 +114,25 @@ class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly, )
     serializer_class = CommentCreateSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        check = self.check_user_id(request)
+        if check:
+            return check
+        comment = Comment.objects.get(id=request.data['id'])
+        text = request.data.get('text')
+        if text:
+            comment.text = text
+        comment.save()
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
+
+    def check_user_id(self, request):
+        print('in check')
+        if request.data['user_id'] != int(request.data['current_user_id']):
+            return Response({'detail': ('not yours')}, status=status.HTTP_200_OK)
 
 
 ####################################################################
@@ -219,7 +283,6 @@ class TagDeleteViewSet(ModelViewSet):
     serializer_class = TagDeleteSerializer
 
     def put(self, request, *args, **kwargs):
-        print('in put')
         return self.retrieve(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
@@ -236,13 +299,64 @@ class RemoveTagRelation(ModelViewSet):
         return self.update(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        # partial = kwargs.pop('partial', False)
         instance = Tag.objects.get(id=request.data['id'])
-        # print(instance)
-        # print(instance.question_id)
-        # print(type(instance.question_id))
         instance.question_id.remove(request.data['question_id'])
         return Response({'detail': 'updated'}, status=status.HTTP_200_OK)
+
+
+class ModeratorQuestionEditViewSet(ModelViewSet):
+    queryset = Question.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = ModeratorQuestionSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        check = self.check_group(request)
+        if check:
+            return check
+        question = Question.objects.get(id=request.data['id'])
+        title = request.data.get('title')
+        body = request.data.get('body')
+        if title:
+            question.title = title
+        if body:
+            question.body = body
+        question.save()
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
+
+    def check_group(self, request):
+        if request.data['group'] != 'moderator':
+            return Response({'detail': ('no permissions')}, status=status.HTTP_200_OK)
+
+
+class ModeratorAnswerEditViewSet(ModelViewSet):
+    queryset = Answer.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = ModeratorAnswerSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        check = self.check_group(request)
+        if check:
+            return check
+        answer = Answer.objects.get(id=request.data['id'])
+        title = request.data.get('title')
+        body = request.data.get('body')
+        if title:
+            answer.title = title
+        if body:
+            answer.body = body
+        answer.save()
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
+
+    def check_group(self, request):
+        if request.data['group'] != 'moderator':
+            return Response({'detail': ('no permissions')}, status=status.HTTP_200_OK)
+
 
 
 class SkillViewSet(ModelViewSet):
