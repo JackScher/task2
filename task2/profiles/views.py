@@ -1,8 +1,9 @@
 from allauth.account.views import ConfirmEmailView
 from django_filters.rest_framework import DjangoFilterBackend
+
 # from rest_auth.models import TokenModel
 # from rest_auth.registration.app_settings import RegisterSerializer, register_permission_classes
-# from rest_auth.registration.views import RegisterView
+
 from rest_auth.models import TokenModel
 from rest_auth.registration.app_settings import register_permission_classes, RegisterSerializer
 from rest_auth.registration.views import RegisterView
@@ -12,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from profiles.models import UserProfile, StatusChoice
+from profiles.models import UserProfile
 from profiles.serializers import UserProfileSerializer, UpdateUserProfileSerializer
 
 
@@ -119,3 +120,15 @@ class UpdateUserProfileView(ModelViewSet):
 
         return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
 
+
+class ConfirmModeratorViewSet(ModelViewSet):
+    queryset = UserProfile.objects.all()
+    permission_classes = (AllowAny, )
+    serializer_class = UserProfileSerializer
+
+    def create(self, request, *args, **kwargs):
+        user = UserProfile.objects.get(id=request.data['current_user'])
+        if user.id == int(request.data['user']):
+            user.user_group = 'moderator'
+            user.save()
+        return Response({'detail': ('ok')}, status=status.HTTP_200_OK)

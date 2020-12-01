@@ -1,6 +1,7 @@
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.utils import user_email, user_username, user_field
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 
 from profiles.models import UserProfile
 
