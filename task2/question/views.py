@@ -50,16 +50,23 @@ class QuestionItemViewSet(ModelViewSet):
     serializer_class = QuestionItemSerializer
 
 
+################################################################
+
+
 class QuestionCreateView(ModelViewSet):
     queryset = Question.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly, )
     serializer_class = QuestionCreateSerializer
 
     def create(self, request, *args, **kwargs):
+        user = UserProfile.objects.get(id=request.data['user_id'])
+        check = self.check(user)
+        if check:
+            return Response({'detail': ('you can`t ask questions')}, status=status.HTTP_200_OK)
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        user = UserProfile.objects.get(id=request.data['user_id'])
         user.rating += 1
         user.save()
         headers = self.get_success_headers(serializer.data)
@@ -67,6 +74,43 @@ class QuestionCreateView(ModelViewSet):
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+
+    def get_question_count_per_month(self, user):
+        count = user.rating//100 + 5
+        return count
+
+    def get_question_list(self, user):
+        count = self.get_question_count_per_month(user)
+        questions = Question.objects.filter(user_id=user.id).order_by('-id')[:count][::-1]
+        if questions:
+            return questions
+        else:
+            return None
+
+    def check(self, user):
+        question_list = self.get_question_list(user)
+        if question_list:
+            obj = question_list[0]
+            current_count = len(question_list)
+            max_count = self.get_question_count_per_month(user)
+            time_count = timedelta(days=30)
+            created, now = self.get_date_create(obj)
+
+            if current_count < max_count:
+                return None
+
+            if time_count <= now-created and current_count <= max_count:
+                return None
+            else:
+                return True
+        else:
+            return None
+
+    def get_date_create(self, obj):
+        date = datetime.strptime(obj.date_create.strftime("%b %d %Y %H:%M:%S"), "%b %d %Y %H:%M:%S")
+        now = datetime.strptime(datetime.now().strftime("%b %d %Y %H:%M:%S"), "%b %d %Y %H:%M:%S")
+        return date, now
+
 
 ####################################################################
 

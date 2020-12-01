@@ -128,7 +128,8 @@ class ConfirmModeratorViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         user = UserProfile.objects.get(id=request.data['current_user'])
-        if user.id == int(request.data['user']):
+        id = request.data['user']
+        if user.id == int(id):
             user.user_group = 'moderator'
             user.save()
         return Response({'detail': ('ok')}, status=status.HTTP_200_OK)
